@@ -1,5 +1,5 @@
 var mastermind = function (){
-  var temoin = [], result = [], proposition = [], wrong = null, right = null;
+  var temoin = [], result = [], proposition = [], right = null, trycount = 0;
   var valider = $('#valider');
   var couleur=['white','red','green','blue','yellow','orange'];
 
@@ -36,19 +36,28 @@ var mastermind = function (){
     var prop;
     proposition = [];
     result = [];
+    trycount++;
+    $('.validation').append('<div class="row" id="try'+trycount+'"><div class="col-3 trytext"><p>Essai n°'+trycount+'</p></div><div class="col-6 trycircle"></div><div class="col-3 result"><div class="circle_result"></div><div class="circle_result"></div><div class="circle_result"></div><div class="circle_result"></div></div></div>');
     for (var i = 1; i < 5; i++) {
       prop = $('#couleur div:nth-child('+i+')').attr('data-color');
-      $('.validation').append('<div class="circleValidation"></div>');
-      $('.circleValidation').css('backgroundColor', prop);
+      $('#try'+trycount+' .trycircle').append('<div class="circle circleValidation"></div>');
+      $('#try'+trycount+' .trycircle div:nth-child('+i+')').css('backgroundColor', prop);
       proposition.push(prop);
-      console.log(prop);
     }
     compare(proposition, temoin);
+    if (right === 4) {
+      win();
+    }
+    else {
+      for (var i = 1; i < right+1; i++) {
+        $('#try'+trycount+' .result div:nth-child('+i+')').css('backgroundColor', 'white');
+      }
+    }
 
   }
 
   function compare(tab, tabRef) {
-    wrong = 0, right = 0;
+    right = 0;
     for (i = 0; i < 4; i++) {
       for (j = 0; j < 4; j++) {
         if (tabRef[i] === tab[j]) {
@@ -58,10 +67,15 @@ var mastermind = function (){
           }
         }
       }
-      if (tab[i] != null) {
-        wrong++;
-      }
     }
+  }
+
+  function win() {
+    var win_alert = ' tours !';
+    if (trycount === 1) {
+      win_alert = ' tour !';
+    }
+    alert('Vous avez gagné en '+ trycount + win_alert);
   }
 
   return {
