@@ -40,30 +40,39 @@ var mastermind = function (){
   }
 
   function validation(){
-    if (trycount < 10) {
-      var prop;
-      proposition = [];
-      result = [];
-      trycount++;
-      $('.validation').append('<div class="row trycontainer" id="try'+trycount+'"><div class="col-3 trytext"><p>Essai n°'+trycount+'</p></div><div class="col-6 trycircle"></div><div class="col-3 result"><div class="circle_result"></div><div class="circle_result"></div><div class="circle_result"></div><div class="circle_result"></div></div></div>');
-      for (var i = 1; i < 5; i++) {
-        prop = $('#couleur div:nth-child('+i+')').attr('data-color');
-        $('#try'+trycount+' .trycircle').append('<div class="circle circleValidation"></div>');
-        $('#try'+trycount+' .trycircle div:nth-child('+i+')').css('backgroundColor', prop);
-        proposition.push(prop);
-      }
-      compare(proposition, temoin);
-      for (var i = 1; i < right+1; i++) {
-        $('#try'+trycount+' .result div:nth-child('+i+')').css('backgroundColor', 'white');
-      }
+    if (trycount < 9) {
+      validation_loop();
       if (right === 4) {
         win();
       }
     }
     else {
-      loose();
+      validation_loop();
+      if (right === 4) {
+        win();
+      }
+      else {
+        loose();
+      }
     }
+  }
 
+  function validation_loop() {
+    var prop;
+    proposition = [];
+    result = [];
+    trycount++;
+    $('.validation').append('<div class="row trycontainer" id="try'+trycount+'"><div class="col-3 trytext"><p>Essai n°'+trycount+'</p></div><div class="col-6 trycircle"></div><div class="col-3 result"><div class="circle_result"></div><div class="circle_result"></div><div class="circle_result"></div><div class="circle_result"></div></div></div>');
+    for (var i = 1; i < 5; i++) {
+      prop = $('#couleur div:nth-child('+i+')').attr('data-color');
+      $('#try'+trycount+' .trycircle').append('<div class="circle circleValidation"></div>');
+      $('#try'+trycount+' .trycircle div:nth-child('+i+')').css('backgroundColor', prop);
+      proposition.push(prop);
+    }
+    compare(proposition, temoin);
+    for (var i = 1; i < right+1; i++) {
+      $('#try'+trycount+' .result div:nth-child('+i+')').css('backgroundColor', 'green');
+    } 
   }
 
   function compare(tab, tabRef) {
@@ -84,6 +93,9 @@ var mastermind = function (){
     var win_alert = ' tours !';
     if (trycount === 1) {
       win_alert = ' tour !';
+    }
+    if (trycount === 10) {
+      win_alert= win_alert + ' Un peu de plus, vous auriez perdu !'
     }
     content = '<p>Vous avez gagné en '+ trycount + win_alert + '</p>';
     modal_show();
