@@ -1,5 +1,5 @@
 var mastermind = function (){
-  var temoin, result, proposition, right, trycount, content, couleur = ['white','red','green','blue','yellow','orange'];
+  var temoin, result, proposition, right, wrong, trycount, content, couleur = ['white','red','green','blue','yellow','orange'];
 
   function init (){
     temoin = [], result = [], proposition = [], right = null, trycount = 0, content = null;
@@ -70,6 +70,7 @@ var mastermind = function (){
       proposition.push(prop);
     }
     compare(proposition, temoin);
+    console.log(temoin);
     for (var i = 1; i < right+1; i++) {
       $('#try'+trycount+' .result div:nth-child('+i+')').css('backgroundColor', 'green');
     } 
@@ -77,24 +78,36 @@ var mastermind = function (){
 
   function compare(tab, tabRef) {
     right = 0;
+    wrong = 0;
+    var copytemoin = new Array().concat(tabRef);
+
     for (i = 0; i < 4; i++) {
-      for (j = 0; j < 4; j++) {
-        if (tabRef[i] === tab[j]) {
-          if (i===j) {
-            right++;
-            tab[j] = null;
-          }
+      if (tab[i] === copytemoin[i]) {
+        right ++;
+        copytemoin[i]=null;
+        tab[i]=null;
+      }
+    }
+    for (j = 0; j < 4; j++) {
+      var a = copytemoin.indexOf(tab[j]);
+      if (tab[j] !== null) {
+        if (a>=0) {
+          wrong++;
+          tab[j] = null;
+          copytemoin[a] = null;
         }
       }
     }
+    console.log(right);
+    console.log(wrong);
   }
 
   function win() {
     var win_alert = ' tours !';
-    if (trycount === 1) {
+    if (trycount == 1) {
       win_alert = ' tour !';
     }
-    if (trycount === 10) {
+    if (trycount == 10) {
       win_alert= win_alert + ' Un peu de plus, vous auriez perdu !'
     }
     content = '<p>Vous avez gagné en '+ trycount + win_alert + '</p>';
