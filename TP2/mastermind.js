@@ -70,10 +70,13 @@ var mastermind = function (){
       proposition.push(prop);
     }
     compare(proposition, temoin);
-    console.log(temoin);
     for (var i = 1; i < right+1; i++) {
       $('#try'+trycount+' .result div:nth-child('+i+')').css('backgroundColor', 'green');
-    } 
+    }
+    for (var i = 1; i < wrong+1; i++) {
+      var nth_count = right + i;
+      $('#try'+trycount+' .result div:nth-child('+nth_count+')').css('backgroundColor', 'grey');
+    }
   }
 
   function compare(tab, tabRef) {
@@ -98,8 +101,6 @@ var mastermind = function (){
         }
       }
     }
-    console.log(right);
-    console.log(wrong);
   }
 
   function win() {
